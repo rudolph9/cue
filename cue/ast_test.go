@@ -504,6 +504,30 @@ func TestEval(t *testing.T) {
 		in:   `a: 0x8`,
 		expr: `mathematics.Abs(a)`,
 		out:  `_|_(reference "mathematics" not found)`,
+	}, {
+		// Issue #242
+		in:   `
+			cell: a:  0 | 1
+			cell: a:  != cell.b
+			cell: b:  0 | 1
+			cell: b:  != cell.a
+			cell: a:  _
+			cell: b:  1
+		`,
+		expr: `cell`,
+		out:  `<0>{a: 0, b: 1}`,
+	}, {
+		// Issue #242
+		in:   `
+			cell: a:  0 | 1
+			cell: a:  != cell.b
+			cell: b:  0 | 1
+			cell: b:  != cell.a
+			cell: a:  0
+			cell: b:  _
+		`,
+		expr: `cell`,
+		out:  `<0>{a: 0, b: 1}`,
 	}}
 	for _, tc := range testCases {
 		t.Run("", func(t *testing.T) {
