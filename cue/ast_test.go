@@ -528,6 +528,30 @@ func TestEval(t *testing.T) {
 		`,
 		expr: `cell`,
 		out:  `<0>{a: 0, b: 1}`,
+	}, {
+		// Issue #242
+		in:   `
+			cell: a:  0 | 1
+			cell: a:  != cell.b
+			cell: b:  0 | 1
+			cell: b:  != cell.a
+			cell: a:  0
+			cell: b:  _
+		`,
+		expr: `cell.b`,
+		out:  `1`,
+	}, {
+		// Issue #242
+		in:   `
+			cell: a:  0 | 1
+			cell: a:  != cell.b
+			cell: b:  0 | 1
+			cell: b:  != cell.a
+			cell: a:  0
+			cell: b:  _
+		`,
+		expr: `cell.a`,
+		out:  `0`,
 	}}
 	for _, tc := range testCases {
 		t.Run("", func(t *testing.T) {
